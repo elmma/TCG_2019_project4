@@ -126,6 +126,8 @@ int main(int argc, char** argv)
 				{
 					tree.show_path();
 				}
+				if(simulationFinishedCnt %2000==0)
+					if((double)(e-st) / CLOCKS_PER_SEC > 0.9) break;
 			}
 			k= tree.root -> get_bestmove();
 			ucbnode* tmp = tree.root -> childptr;
@@ -133,7 +135,7 @@ int main(int argc, char** argv)
 			policy = tree.root->get_policy();
 			tree.root ->show_child();
 			value = tree.root ->show_inf(k);
-			cerr<<"simulation time : "<< (double)(e-st) / 1000.0<<endl;
+			cerr<<"simulation time : "<< (double)(e-st) / CLOCKS_PER_SEC << "(sec)"<<endl;
 			cerr<<"average deep : "<<(double)tree.total / (double)i<<endl;
 			cerr<<"total node : "<< tree.totalnode<<endl;
 			cerr<<"average speed : "<< (simulationFinishedCnt*1000) / (e-st) <<endl;
