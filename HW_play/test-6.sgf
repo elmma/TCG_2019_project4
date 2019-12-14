@@ -1,16 +1,16 @@
 (;FF[4]CA[UTF-8]AP[gogui-twogtp:1.4.9]SZ[9]
-KM[6.5]PB[haha25_rn20_bn0[1\]]PW[haha25_rn20_bn0[2\]]DT[2019-12-14]RE[B+R]
+KM[6.5]PB[haha25_rn20_bn0[1\]]PW[haha25_rn20_bn0[2\]]DT[2019-12-14]RE[W+R]
 C[Black command: ../hahanogo
 White command: ./op_model/hahanogo
 Black version: 
 White version: 
-Result[Black\]: B+R
-Result[White\]: B+R
+Result[Black\]: W+R
+Result[White\]: W+R
 Host: DESKTOP-4KK0TOM (AMD Ryzen 7 2700X Eight-Core Processor)
-Date: December 14, 2019 at 5:02:10 PM GMT]
-;B[aa];W[ii];B[ia];W[ai];B[ac];W[bb];B[hb];W[ib];B[hc];W[ga]
-;B[id];W[ad];B[he];W[hd];B[if];W[hf];B[fd];W[af];B[ag];W[be]
-;B[bd];W[ce];B[cf];W[ci];B[bh];W[bg];B[de];W[dh];B[ei];W[ig]
-;B[hh];W[cc];B[cd];W[fi];B[bf];W[gh];B[ch];W[hi];B[ef];W[dg]
-;B[fh];W[gg];B[gf];W[ee];B[eg];W[ff];B[cb];W[dd];B[ih];W[ab]
-;B[ah];W[ec];B[dc];W[ca];B[di];W[fg];B[gc])
+Date: December 14, 2019 at 6:57:09 PM GMT]
+;B[ai];W[ii];B[ci];W[bh];B[ia];W[aa];B[ic];W[hb];B[fi];W[bb]
+;B[ab];W[bc];B[ca];W[ad];B[gh];W[gi];B[eh];W[fh];B[di];W[ig]
+;B[dg];W[dh];B[hh];W[be];B[bd];W[af];B[ag];W[cg];B[cf];W[bi]
+;B[ef];W[de];B[bg];W[bf];B[ff];W[ie];B[gg];W[fg];B[if];W[gf]
+;B[dd];W[ed];B[ea];W[db];B[fa];W[id];B[gb];W[ha];B[fc];W[eb]
+;B[dc];W[hc];B[fe];W[cc];B[ga];W[df];B[gd];W[fb])
