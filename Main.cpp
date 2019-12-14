@@ -12,6 +12,8 @@
 #include"MCTStree.h"
 using namespace std;
 
+// we see as env settings
+//----------------------------------------
 string toSGFstring(int i)
 {
 	string s="aa";
@@ -45,6 +47,8 @@ string inttoGTPstring(int i)
     s[1]+= i % 9;
     return s;
 }
+//----------------------------------------
+
 MCTStree tree;
 
 int main(int argc, char** argv)
@@ -85,12 +89,13 @@ int main(int argc, char** argv)
 		{
 			b.clear();
 			cout<<"="<<endl<<endl;
-		}else if(s[0]=='g' || s == "reg_genmove")
+		}else if(s[0]=='g' || s == "reg_genmove")	// our turn
 		{
 			bool j,f=false;
 			int st,e;
 			cin>>c;
 			j=!b.just_play_color();
+			// feasible check. if no move, resign 
 			for(i=0;i<BOARDSSIZE;i++)
 			{
 				if(b.check(i,j))
@@ -104,10 +109,11 @@ int main(int argc, char** argv)
 				cout<<"=resign"<<endl<<endl;
 				continue;
 			}
-			tree.reset(b);
+			tree.reset(b);	// tree in
 			e = st = clock();
 			int simulationFinishedCnt = 0;
 			//while(e-st<t)
+			// playout simulation
 			while(simulationFinishedCnt < simulationCnt)
 			{
 				tree.run_a_cycle();
@@ -127,18 +133,21 @@ int main(int argc, char** argv)
 					tree.show_path();
 				}
 			}
-			k= tree.root -> getbestmove();
-			ucbnode* tmp = tree.root -> childptr;
-			int best_move = (tmp+k)->place;
-			policy = tree.root->getPolicy();
+			// final decision
+			k= tree.root -> getbestmove();	// return child idx
+			// ucbnode* tmp = tree.root -> childptr;
+			// int best_move = (tmp+k)->place;
+			int best_move = (tree.root -> childptr)[k].place;
+			policy = tree.root->getPolicy();	// dist. for choice
 			tree.root ->show_child();
 			value = tree.root ->show_inf(k);
-			cerr<<"simulation time : "<< (double)(e-st) / 1000.0<<endl;
+			//cerr<<"simulation time : "<< (double)(e-st) / 1000.0<<endl;
+			cerr<<"simulation time : "<< (double)(e-st) / CLOCKS_PER_SEC << "(sec)" <<endl;
 			cerr<<"average deep : "<<(double)tree.total / (double)i<<endl;
 			cerr<<"total node : "<< tree.totalnode<<endl;
-			cerr<<"average speed : "<< (simulationFinishedCnt*1000) / (e-st) <<endl;
+			cerr<<"average speed : "<< (simulationFinishedCnt * CLOCKS_PER_SEC) / (e-st) << "(cnt/sec)" <<endl;
 			tree.show_path();
-			if(s != "reg_genmove")
+			if(s != "reg_genmove")	// truely play the move
 				b.add(best_move, !b.just_play_color());
 			if(value > 0.2)
 			{
@@ -148,7 +157,7 @@ int main(int argc, char** argv)
 				cout<<"=resign"<<endl<<endl;
 			}
 			
-			tree.clear();
+			tree.clear();	// tree out
 
 		}
 		else if (s == "policy")

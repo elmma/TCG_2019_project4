@@ -5,22 +5,22 @@
 #define basenum 0
 #define ravenum 20
 
-#define minusnum (basenum - 2)//¤£¯à´î¤@
+#define minusnum (basenum - 2)//ä¸èƒ½æ¸›1
 #define minusrnum (ravenum - 2)
 const double UCB_WEIGHT = 0.25;
 class ucbnode
 {
 
 public:
-	char place;//¦¹¨B¤U­ş
-	bool color;//½Ö¤Uªº
-	char child[BOARDSSIZE+1];//§ä¤p«Ä
+	char place;//æ­¤æ­¥ä¸‹å“ª
+	bool color;//èª°ä¸‹çš„
+	char child[BOARDSSIZE+1];//æ‰¾å°å­©
 	int csize;
 	ucbnode* childptr;
 	double count;//basenum + real
-	double mean; //1:color Ä¹ 0:color ¿é
+	double mean;  //1:color è´ 0:color è¼¸
 	double ravecount;//ravenum +real
-	double ravemean;// 1 color Ä¹  -1 color ¿é
+	double ravemean;// 1 color è´  -1 color è¼¸
 	double logc;
 
     void initucbnode(int i,bool j,double rm,double rn);

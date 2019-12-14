@@ -1,4 +1,10 @@
-HaHaNoGo
+TCG HW4
+===============
+We use the following as reference ,and try to build the MCTS for ourselves.
+here I leave the original API ,try to build the implementation back
+TODO : (1) ucbnode .h .cpp (2) MCTStree .h .cpp
+
+## HaHaNoGo
 ===============
 This is the NoGo program that won against HappyNoGo and got the first place in TAAI 2016. (http://www.cs.nthu.edu.tw/~taai2016/game.html) 
 
