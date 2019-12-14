@@ -5,9 +5,9 @@ double MCTStree::getscore( ucbnode* nodeptr, int child)
 	ucbnode *tmp = (nodeptr->childptr)+child;
 	char &p = tmp->place;
 	bool &c = tmp->color;
-	double &N = tmp->count ;
-	double &NR = tmp->ravecount;
-	double ret = tmp->ravemean*NR + tmp->mean*N +  sqrt( nodeptr->logc * N )* UCB_WEIGHT;
+	double &N = tmp->normal_count ;
+	double &NR = tmp->rave_count;
+	double ret = tmp->rave_mean*NR + tmp->normal_mean*N +  sqrt( log(nodeptr->normal_count) * N )* UCB_WEIGHT;
 	//cout<<tmp->ravemean<<' '<<ret/(N+NR)<<' '<<N<<' '<<NR<<' '<<nodeptr->logc<<endl;
 	//return tmp->mean + UCB_WEIGHT * sqrt(nodeptr->logc / (N + 1));
 	return ret / (N+NR);
@@ -80,22 +80,22 @@ void MCTStree::update(double result,board& b)
 {
 	for(int i=0;i<path.size();i++)
 	{
-		path[i]->addresult(result);
+		path[i]->update_normal(result);
 		if(path[i] -> color ==0)
 		{
 			for(int j=0;j<b.wpsize;j++)
 			{
-				int k = (path[i]->child[b.wpath[j]]);
+				int k = (path[i]->ctable[b.wpath[j]]);
 				if( k !=-1)
-					((path[i]->childptr)+k)->addraveresult(result);
+					((path[i]->childptr)+k)->update_rave(result);
 			}
 		}else
 		{
 			for(int j=0;j<b.bpsize;j++)
 			{
-				int k = (path[i]->child[b.bpath[j]]);
+				int k = (path[i]->ctable[b.bpath[j]]);
 				if( k != -1)
-					((path[i]->childptr)+k)->addraveresult(result);
+					((path[i]->childptr)+k)->update_rave(result);
 			}
 		}
 	}
@@ -109,9 +109,9 @@ void MCTStree::run_a_cycle()
 	select(b);
 	ucbnode &last=(*(path.back()));
 	ucbnode *nodeptr;
-	if(last.csize==0 && last.count > basenum )//¦Ü¤Ösimulate 1 ¦¸
+	if(last.csize==0 && last.normal_count > NORMAL_COUNT_INIT )//ï¿½Ü¤ï¿½simulate 1 ï¿½ï¿½
 	{
-		last.expansion(b,rave_num,rave_wnum);
+		last.expansion(b);
 		if(last.csize!=0)
 		{
 			totalnode+=last.csize;
@@ -152,10 +152,9 @@ void MCTStree::reset(board &b)
 	root = new ucbnode;
 	root -> color = rboard.just_play_color();
 	root -> place = 81;
-	root -> count = basenum;
-	root -> logc = 1;
-	memset(root -> child,-1,sizeof(root -> child)  );
-	root-> expansion(b,rave_num,rave_wnum);
+	root -> normal_count = NORMAL_COUNT_INIT;
+	memset(root -> ctable,-1,sizeof(root -> ctable)  );
+	root-> expansion(b);
 	total = 0;
 	totalnode =0;
 }
@@ -167,7 +166,7 @@ void MCTStree::show_path()
 	i=0;
 	while( nodeptr->childptr != NULL && i<10)
 	{
-		k=nodeptr ->getbestmove();
+		k=nodeptr ->get_bestmove();
 		nodeptr = nodeptr->childptr +k;
 		i++;
 		if(nodeptr != NULL){

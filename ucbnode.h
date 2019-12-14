@@ -2,39 +2,73 @@
 #define UCBNODE_H
 #include "board.h"
 #include <math.h>
-#define basenum 0
-#define ravenum 20
 
-#define minusnum (basenum - 2)//不能減一
-#define minusrnum (ravenum - 2)
+// UCB exploration constant
 const double UCB_WEIGHT = 0.25;
+
+// heuristic const 
+#define MEAN_INIT 0.5	
+#define NORMAL_COUNT_INIT 0
+#define RAVE_COUNT_INIT 20
+
 class ucbnode
 {
 
 public:
-	char place;//此步下哪
-	bool color;//誰下的
-	char child[BOARDSSIZE+1];//找小孩
-	int csize;
-	ucbnode* childptr;
-	double count;//basenum + real
-	double mean; //1:color 贏 0:color 輸
-	double ravecount;//ravenum +real
-	double ravemean;// 1 color 贏  -1 color 輸
-	double logc;
+	char place; // move location
+	bool color;	// who did this move
+	
+	// children info.
+	int csize;	
+	ucbnode *childptr;
+	char ctable[BOARDSSIZE+1];	// child lookup table for RAVE
+	
+	// counting info.
+	double normal_count;		
+	double normal_mean;  		
+	double rave_count;	
+	double rave_mean;	
 
-    void initucbnode(int i,bool j,double rm,double rn);
-    void addresult(double result);
-    void addraveresult(double result);
-    int getbestmove();
-	vector<float> getPolicy();
-    void show_child();
+	// self try
+    void init_ucbnode(int move_loc,bool who);
+    void update_normal(double result);
+    void update_rave(double result);
+    int get_bestmove();
+	vector<float> get_policy();
+	void expansion(board &b);
+
+	// some func. in MCTStree.h move to here
+	double get_score(int child_idx);
+	ucbnode* get_bestchild();
+    
+	// no change
+	void show_child();
     float show_inf(int child);
-    void expansion(board &b,double rave_num[2][BOARDSSIZE] ,double rave_wnum[2][BOARDSSIZE]);
 	string inttostring(int i);
     string inttoGTPstring(int i);
 	ucbnode();
 	~ucbnode();
-	void setlogc();
 };
 #endif //UCBNODE_H
+
+/*
+-----------------------------------------
+some note for ucb node
+-----------------------------------------
+1. 	we have to maintain "normal winrate" and "RAVE(AMAF) winrate" resp.
+   	in RAVE ,we have to use the weighted of the two
+
+	the update policy of the two differ ,but in here we simply 
+	do the update for a playout, leaving it in MCTS implemtation
+
+2. 	UCB expansion : local node expansion ,to expand ,we would first check
+	all feasible next move ,recording as "children" node, actually it suffice 
+	to maintain the children list itself. And locally maintain the children UCB list
+	the init for children : heuristic
+
+3. 	getBestMove : choose the child having most count
+
+4. 	getPolicy : return the dist. for children
+
+5. 	we leave some printing and protocol utilities 
+*/

@@ -127,10 +127,10 @@ int main(int argc, char** argv)
 					tree.show_path();
 				}
 			}
-			k= tree.root -> getbestmove();
+			k= tree.root -> get_bestmove();
 			ucbnode* tmp = tree.root -> childptr;
 			int best_move = (tmp+k)->place;
-			policy = tree.root->getPolicy();
+			policy = tree.root->get_policy();
 			tree.root ->show_child();
 			value = tree.root ->show_inf(k);
 			cerr<<"simulation time : "<< (double)(e-st) / 1000.0<<endl;
@@ -188,7 +188,7 @@ int main(int argc, char** argv)
 		}
 		else if(s== "name")
 		{
-			cout<<"=haha"<< UCB_WEIGHT * 100<<"_rn"<<ravenum<<"_bn"<<basenum << "\n\n";
+			cout<<"=haha"<< UCB_WEIGHT * 100<<"_rn"<<RAVE_COUNT_INIT<<"_bn"<<NORMAL_COUNT_INIT << "\n\n";
 		}else if(s== "time")
 		{
 			cin>>t;
