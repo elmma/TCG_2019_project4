@@ -1,52 +1,5 @@
 #include "MCTStree.h"
 
-double MCTStree::getscore( ucbnode* nodeptr, int child)
-{
-	ucbnode *tmp = (nodeptr->childptr)+child;
-	char &p = tmp->place;
-	bool &c = tmp->color;
-	double &N = tmp->normal_count ;
-	double &NR = tmp->rave_count;
-	double ret = tmp->rave_mean*NR + tmp->normal_mean*N +  sqrt( log(nodeptr->normal_count) * N )* UCB_WEIGHT;
-	//cout<<tmp->ravemean<<' '<<ret/(N+NR)<<' '<<N<<' '<<NR<<' '<<nodeptr->logc<<endl;
-	//return tmp->mean + UCB_WEIGHT * sqrt(nodeptr->logc / (N + 1));
-	return ret / (N+NR);
-}
-
-ucbnode* MCTStree::getbestchild(ucbnode* nodeptr)
-{
-	if(nodeptr->csize == 0)return NULL;
-	int i,ret=0;
-	double ans,tmp = getscore(nodeptr,0),tma;//tmp minus anwser
-	ans=tmp;
-	selectlist[0]=0;
-	slsize = 1;
-	for(i=1;i<(nodeptr->csize);i++)
-	{
-		tmp = getscore(nodeptr,i);
-		tma = tmp-ans;
-		if( tma > -0.0001 )//tmp >= ans
-		{
-			if(tma > 0.0001) // tmp > ans
-			{
-				selectlist[0]=i;
-				slsize = 1;
-				ans = tmp;
-			}else  //tmp == ans
-			{
-				selectlist[slsize]=i;
-				slsize ++ ;
-			}
-		}
-	}
-	//for(i=0;i<slsize;i++)
-	//{
-	//	cout<<selectlist[i]<<' ';
-	//}
-	//cout<<endl;
-	ret = selectlist[ rand() % slsize ];
-	return (nodeptr->childptr +ret);
-}
 
 void MCTStree::select(board &b)
 {
@@ -59,7 +12,7 @@ void MCTStree::select(board &b)
 	path.push_back(nodeptr);
 	while(nodeptr->childptr != NULL && nodeptr->csize != 0)
 	{
-		nodeptr = getbestchild(nodeptr);
+		nodeptr = nodeptr->get_bestchild();
 		path.push_back(nodeptr);
 	//	cout<<inttostring(nodeptr->place)<<' ';
 		if(nodeptr->color == BLACK)
@@ -115,7 +68,7 @@ void MCTStree::run_a_cycle()
 		if(last.csize!=0)
 		{
 			totalnode+=last.csize;
-			nodeptr = getbestchild(&last);
+			nodeptr = last.get_bestchild();
 			path.push_back(nodeptr);
 			if(nodeptr->color == 0)
 			{
@@ -148,17 +101,27 @@ void MCTStree::run_a_cycle()
 }
 void MCTStree::reset(board &b)
 {
+	// rboard=b;
+	// root = new ucbnode;
+	// root -> color = rboard.just_play_color();
+	// root -> place = 81;
+	// root -> normal_count = NORMAL_COUNT_INIT;
+	// memset(root -> ctable,-1,sizeof(root -> ctable)  );
+	// root-> expansion(b);
+	// total = 0;
+	// totalnode =0;
+
 	rboard=b;
 	root = new ucbnode;
-	root -> color = rboard.just_play_color();
-	root -> place = 81;
-	root -> normal_count = NORMAL_COUNT_INIT;
-	memset(root -> ctable,-1,sizeof(root -> ctable)  );
+	root->init_ucbnode(81,rboard.just_play_color());
 	root-> expansion(b);
 	total = 0;
 	totalnode =0;
 }
 
+
+// utilities , no change
+//----------------------------------------------
 void MCTStree::show_path()
 {
 	ucbnode* nodeptr = root;

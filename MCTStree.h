@@ -20,8 +20,6 @@ public:
 	int total;
 	int totalnode;
 
-    double getscore( ucbnode* nodeptr, int child);
-    ucbnode* getbestchild(ucbnode* nodeptr);
     void select(board &b);
     void update(double result,board& b);
     void run_a_cycle();
