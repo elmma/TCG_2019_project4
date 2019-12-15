@@ -1,4 +1,9 @@
-HaHaNoGo
+## TCG HW4
+===============
+我們在這以 reference 的 HaHaNoGo 為骨幹，嘗試修改其MCTS的實作，這裡我們主要變動的地方在
+ucbnode(.h,.cpp) MCTCtree(.h,.cpp)，以及處理time limit的問題
+
+## HaHaNoGo
 ===============
 This is the NoGo program that won against HappyNoGo and got the first place in TAAI 2016. (http://www.cs.nthu.edu.tw/~taai2016/game.html) 
 
